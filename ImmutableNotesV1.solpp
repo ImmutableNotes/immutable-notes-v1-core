@@ -51,7 +51,7 @@ contract ImmutableNotes {
     bytes32 key = fromhash();
     uint256 timestamp = block.timestamp;
     if (relatedNoteHash != 0) {
-      require(notes[relatedNoteHash].timestamp != 0, "Related note does not exist");
+      require(notes[relatedNoteHash].timestamp != 0); // Related note does not exist if timestamp == 0
     }
     notes[key] = Note({
       hash: key,
@@ -67,26 +67,23 @@ contract ImmutableNotes {
 
   onMessage updateRelatedNoteHash(bytes32 noteHash, bytes32 relatedNoteHash) {
     Note storage note = notes[noteHash];
-    require(msg.sender == note.author, "Sender must be note author");
-    require(noteHash != relatedNoteHash, "noteHash and relatedNoteHash must be different");
+    require(msg.sender == note.author && noteHash != relatedNoteHash);
     if (relatedNoteHash != 0) {
-      require(notes[relatedNoteHash].timestamp != 0, "Related note does not exist");
+      require(notes[relatedNoteHash].timestamp != 0);
     }
     note.relatedNoteHash = relatedNoteHash;
   }
 
   onMessage tipNote(bytes32 noteHash) payable {
-    require(msg.amount > 0, "Tip amout must be positive");
     Note storage note = notes[noteHash];
-    require(msg.sender != note.author, "Sender cannot be note author");
+    require(msg.sender != note.author && msg.amount > 0);
     note.author.transfer(msg.tokenid, msg.amount);
     note.tips[msg.tokenid] += msg.amount;
     timelines[note.author].tips[msg.tokenid] += msg.amount;
   }
 
   onMessage tipTimeline(address author) payable {
-    require(msg.amount > 0, "Tip amout must be positive");
-    require(msg.sender != author, "Sender cannot be author");
+    require(msg.amount > 0 && msg.sender != author);
     author.transfer(msg.tokenid, msg.amount);
     Timeline storage timeline = timelines[author];
     timeline.tips[msg.tokenid] += msg.amount;
@@ -148,8 +145,7 @@ contract ImmutableNotes {
   }
 
   onMessage changeOwner(address newOwner) {
-    require(msg.sender == owner, "Sender must be owner");
-    require(newOwner != owner, "newOwner cannot be owner");
+    require(msg.sender == owner && newOwner != owner);
     owner = newOwner;
   }
 
