@@ -38,15 +38,7 @@ contract ImmutableNotes {
     timelines[msg.sender].bio = bio;
   }
 
-  onMessage recordNote(string calldata noteText) {
-    recordNote(noteText, 0);
-  }
-
-  onMessage recordNoteWithRelatedNoteHash(string calldata noteText, bytes32 relatedNoteHash) {
-    recordNote(noteText, relatedNoteHash);
-  }
-
-  function recordNote(string memory noteText, bytes32 relatedNoteHash) private {
+  onMessage recordNote(string calldata noteText, bytes32 relatedNoteHash) {
     totalNotes++;
     bytes32 key = fromhash();
     uint256 timestamp = block.timestamp;
@@ -89,16 +81,7 @@ contract ImmutableNotes {
     timeline.tips[msg.tokenid] += msg.amount;
   }
 
-  onMessage requestNoteByHash(bytes32 noteHash, tokenId[] calldata tokenIds) {
-    (address author, uint256 timestamp, string memory text, uint256[] memory tipsCount, bytes32 relatedNoteHash) = getNoteByHash(noteHash, tokenIds);
-    send(msg.sender, noteByHashData(author, timestamp, text, tipsCount, relatedNoteHash));
-  }
-
   getter getNoteByHash(bytes32 noteHash, tokenId[] calldata tokenIds) returns (address, uint256, string memory, uint256[] memory, bytes32) {
-    return getNoteByHash(noteHash, tokenIds);
-  }
-
-  function getNoteByHash(bytes32 noteHash, tokenId[] memory tokenIds) private view returns (address, uint256, string memory, uint256[] memory, bytes32) {
     Note storage note = notes[noteHash];
     uint256[] memory tipsCount = new uint256[](tokenIds.length);
     for (uint256 i = 0; i < tokenIds.length; i++) {
@@ -153,16 +136,8 @@ contract ImmutableNotes {
     return owner;
   }
 
-  onMessage requestOwner() {
-    send(msg.sender, ownerData(owner));
-  }
-
   getter getTotalNotes() returns(uint256) {
     return totalNotes;
-  }
-
-  onMessage requestTotalNotes() {
-    send(msg.sender, totalNotesData(totalNotes));
   }
 
   onMessage () payable {
