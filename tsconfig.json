@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true
+  },
+  "typeRoots": ["./@types", "./node_modules/@types"],
+  // https://stackoverflow.com/a/63789958/13442719
+  "ts-node": {
+    "files": true
+  }
+}

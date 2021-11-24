@@ -1,0 +1,24 @@
+{
+  "name": "immutable-notes-v1-core",
+  "version": "1.0.0",
+  "description": "This is the Solidity++ contract for [app.immutablenotes.com](https://app.immutablenotes.com/). It was made for the GR11 hackathon.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ImmutableNotes/immutable-notes-v1-core.git"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.22",
+    "@types/mocha": "^9.0.0",
+    "@vite/vitejs": "2.3.16",
+    "@vite/vitejs-ws": "2.3.16",
+    "chai": "^4.3.4",
+    "dotenv": "10.0.0",
+    "mocha": "9.1.3",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.4.4"
+  },
+  "scripts": {
+    "test": "mocha --bail"
+  },
+  "license": "GPL-3.0-or-later"
+}
